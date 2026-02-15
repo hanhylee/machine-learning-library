@@ -1,3 +1,4 @@
-machine learning optimal nano-library (ML-ON)
+# machine learning optimized nano-library (ml-on)
 author: hanhylee
-# machine-learning-library
+
+this project is envisioned as a highly optimized, no-dependency library to facilitate rapid machine learning projects in c++.
