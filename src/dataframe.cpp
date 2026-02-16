@@ -14,7 +14,43 @@ DataFrame::~DataFrame() {
   delete[] header_names;
 }
 
+// === OPERATOR OVERLOADS ===
+
+DataFrame* DataFrame::operator[](std::string header_name) {
+  int i = 0;
+  int rows = data_matrix->get_rows();
+  int cols = data_matrix->get_cols();
+  while (i < cols) {
+    if (header_names[i] == header_name) {
+      DataFrame* df = new DataFrame();
+      std::string* header_name_container = new std::string[1];
+      header_name_container[0] = header_name;
+      df->set_header_names(header_name_container);
+      Matrix m(rows, 1);
+      for (int j=0; j<rows; ++j) {
+        m(j, 0) = (*data_matrix)(j, i);
+      }
+      df->set_data_matrix(std::move(m));
+      return df;
+    }
+    ++i;
+  }
+  return nullptr;
+}
+
 // === PUBLIC METHODS ===
+void DataFrame::set_header_names(std::string* header_names) {
+  this->header_names = header_names;
+}
+
+void DataFrame::set_data_matrix(Matrix&& data) {
+  this->data_matrix = new Matrix(std::move(data));
+}
+
+void DataFrame::set_index(int index) {
+  this->index = index;
+}
+
 void DataFrame::read_csv(const std::string& filename, bool header, int index) {
   std::ifstream file(filename);
   assert(file.is_open() && "error opening file");
@@ -100,10 +136,67 @@ void DataFrame::info() const {
     }
     std::cout << std::to_string(null_count) << std::endl;
   }
-  //TODO: make multi-type
+  //TODO: make multi-typal
 }
 
 std::tuple<int, int> DataFrame::shape() const {
   if (!data_matrix) return {0, 0};
   return {data_matrix->get_rows(), data_matrix->get_cols()};
+}
+
+double DataFrame::sum() const {
+  int rows = data_matrix->get_rows();
+  int cols = data_matrix->get_cols();
+  double sum = 0.0;
+  for (int i=0; i<rows; ++i) {
+    for (int j=0; j<cols; ++j) {
+      sum += (*data_matrix)(i, j);
+    }
+  }
+  return sum;
+}
+
+double DataFrame::max() const {
+  int rows = data_matrix->get_rows();
+  int cols = data_matrix->get_cols();
+  double max = (*data_matrix)(0, 0);
+  for (int i=0; i<rows; ++i) {
+    for (int j=0; j<cols; ++j) {
+      //TODO: figure out if this is faster than just doing two read of (*data_matrix)(i, j);
+      double temp = (*data_matrix)(i, j);
+      if (temp > max) {
+        max = temp;
+      }
+    }
+  }
+  return max;
+}
+
+double DataFrame::min() const {
+  int rows = data_matrix->get_rows();
+  int cols = data_matrix->get_cols();
+  double min = (*data_matrix)(0, 0);
+  for (int i=0; i<rows; ++i) {
+    for (int j=0; j<cols; ++j) {
+      double temp = (*data_matrix)(i, j);
+      if (temp < min) {
+        min = temp;
+      }
+    }
+  }
+  return min;
+}
+
+double DataFrame::mean() const {
+  return sum()/(data_matrix->get_rows() * data_matrix->get_cols());
+}
+
+double DataFrame::median() const {
+  // TODO
+  return 0.0;
+}
+
+double DataFrame::mode() const {
+  // TODO
+  return 0.0;
 }

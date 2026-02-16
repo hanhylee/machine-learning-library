@@ -24,10 +24,10 @@ Matrix::Matrix(Matrix&& other_matrix) noexcept
   move_matrix(std::move(other_matrix));
 }
 
-Matrix::Matrix(int num_rows, int num_cols, bool random_init) 
-  : rows(num_rows), cols(num_cols), data(nullptr)
+Matrix::Matrix(int rows, int cols, bool random_init) 
+  : rows(rows), cols(cols), data(nullptr)
 {
-  data = new double[num_rows * num_cols]();
+  data = new double[rows * cols]();
 
   if (random_init) {
     randomize_weights();
@@ -43,6 +43,9 @@ double& Matrix::operator()(int row_idx, int col_idx) {
 }
 
 const double& Matrix::operator()(int row_idx, int col_idx) const {
+  assert(row_idx >= 0 && row_idx < rows && "row index out of bounds");
+  assert(col_idx >= 0 && col_idx < cols && "col index out of bounds");
+  
   return data[row_idx * cols + col_idx];
 }
 

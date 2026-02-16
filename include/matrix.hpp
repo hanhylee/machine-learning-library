@@ -19,8 +19,8 @@ public:
   * if set as true, initialize matrix with random numbers,
   * else initialize all cells with zero
   */
-  Matrix(int num_rows, int num_cols, bool random_init=false);
-
+  Matrix(int rows, int cols, bool random_init=false);
+  
   // === OPERATOR OVERLOADS ===
   Matrix& operator=(Matrix& other_matrix);
   Matrix& operator=(Matrix&& other_matrix);
@@ -32,13 +32,8 @@ public:
   * @return A reference to the current matrix.
   */
   double& operator()(int row_idx, int col_idx);
-  
-  /**
-  * access operator at (row_idx, col_idx).
-  * @return A reference to the current matrix.
-  */
   const double& operator()(int row_idx, int col_idx) const;
-
+  
   // === GETTERS ===
   int get_cols();
   int get_rows();
