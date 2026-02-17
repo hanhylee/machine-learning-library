@@ -2,20 +2,21 @@
 #define LINEAR_REGRESSION_HPP
 
 #include <iostream>
-#include <matrix.hpp>
+#include <dataframe.hpp>
 
+template <typename T>
 class LinearRegression {
 public:
   LinearRegression();
   ~LinearRegression();
   
-  void fit(const Matrix& X, const Matrix& y);
-  void predict(const Matrix& X);
-  float score(const Matrix& X, const Matrix& y);
+  void fit(const DataFrame<T>& X, const DataFrame<T>& y);
+  void predict(const DataFrame<T>& X);
+  float score(const DataFrame<T>& X, const DataFrame<T>& y);
 
 private:
-  Matrix X;
-  Matrix y;
+  DataFrame<T> X;
+  DataFrame<T> y;
   float* coefficients;
 
 };

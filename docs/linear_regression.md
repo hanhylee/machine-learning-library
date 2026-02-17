@@ -1,6 +1,22 @@
 # linear regression
 
-an estimator that fits a linear model with coefficients w = (w_1, w_2, ..., w_p) to minimize the residual sum of squares between observed and predicted targets.
+an estimator that fits a linear model with coefficients w = (w_1, w_2, ..., w_p) to minimize the residual sum of squares between observed and predicted targets. we do this by estimating the predictions then improving the coefficients using gradient descent.
+
+## initial estimation
+
+we multiply the feature matrix with an Xavier initialized matrix to get the first set of predictions. then we calculate the error vector by subtracting each prediction with the actual result.
+
+## gradient descent loop
+
+at the start of each loop, we multiply the transposed feature matrix by the error vector.
+
+each value in the gradient vector tells us how to adjust each coefficient:
+- if a gradient value is large and positive, the corresponding feature coefficient has an error that grows rapidly as its value increases, thus suggesting that we should decrease the coefficient
+- if a gradient value is negative, it means that increasing the corresponding feature coefficient reduces the error, thus suggesting that we should increase the coefficient
+
+we nudge each coefficient by the learning rate (alpha).
+
+B_j = B_j +/- alpha (i.e. 0.01) * gradient value;
 
 ## attributes
 

@@ -2,16 +2,25 @@
 #define MATRIX_HPP 
 
 /**
- * a Matrix represents a 2d array of doubles using a flattened array data structure.
+ * a Matrix represents a 2d array using a flattened array data structure.
  * index = row_idx * cols + col_idx
  */
+template <typename T>
 class Matrix {
+private:
+  int rows, cols;
+  std::vector<T> data;
+  
+  // === HELPERS ===
+  void randomize_weights();
+  void copy_matrix(Matrix<T>& other);
+  void move_matrix(Matrix<T>&& other);
+
 public:
   // === CONSTRUCTORS ===
   Matrix();
-  ~Matrix();
-  Matrix(Matrix& other_matrix);
-  Matrix(Matrix&& other_matrix) noexcept;
+  Matrix(Matrix<T>& other);
+  Matrix(Matrix<T>&& other) noexcept;
   
   /** 
   * constructor to create a matrix with desired size
@@ -22,41 +31,32 @@ public:
   Matrix(int rows, int cols, bool random_init=false);
   
   // === OPERATOR OVERLOADS ===
-  Matrix& operator=(Matrix& other_matrix);
-  Matrix& operator=(Matrix&& other_matrix);
-  bool operator==(const Matrix& other_matrix);
-  bool operator!=(const Matrix& other_matrix);
+  Matrix<T>& operator=(Matrix<T>& other);
+  Matrix<T>& operator=(Matrix<T>&& other);
+  bool operator==(const Matrix<T>& other);
+  bool operator!=(const Matrix<T>& other);
   
   /**
   * access operator at (row_idx, col_idx).
   * @return A reference to the current matrix.
   */
-  double& operator()(int row_idx, int col_idx);
-  const double& operator()(int row_idx, int col_idx) const;
+  T& operator()(int row_idx, int col_idx);
+  const T& operator()(int row_idx, int col_idx) const;
   
   // === GETTERS ===
-  int get_cols();
-  int get_rows();
-  int get_size();
+  int get_cols() const;
+  int get_rows() const;
+  int get_size() const;
   
   // === METHODS ===
-  void print(int index=5);
+  void print(int rows=5) const;
   void clear_data();
-  void multiply(const Matrix& other_matrix);
-  void multiply(const Matrix& other_matrix, Matrix& result_matrix);
+  void multiply(const Matrix<T>& other);
+  void multiply(const Matrix<T>& other, Matrix<T>& result);
   void transpose();
-  void add_bias_vector(const Matrix& bias_vector);
-  double dot_product(const Matrix& other_matrix);
-    
-private:
-  // === ATTRIBUTES ===
-  int rows, cols;
-  double* data;
-  
-  // === HELPERS ===
-  void randomize_weights();
-  void copy_matrix(Matrix& other_matrix);
-  void move_matrix(Matrix&& other_matrix);
+  void add_bias_vector(const Matrix<T>& bias_vector);
+  T dot_product(const Matrix<T>& other);
+  Matrix<T>& drop_col(int col_idx);
 
 };
 
